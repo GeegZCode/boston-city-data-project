@@ -1,0 +1,53 @@
+<link rel="stylesheet" type="text/css" href="style.css">
+<div id="container">
+  <!-- populated by JS-->
+ 
+    <tr>
+        <th>Name</th>
+        <th>Total Earnings</th>
+    </tr>
+ </table>
+</div>
+<script src="./posts.js"></script>
+<script>
+  function renderPosts(posts, container) {
+    //const len = posts.length; // posts is an array
+    var person =posts.data;
+    var len = person.length;
+    var htmlAvgCalc = '';
+    var html = '';
+    var numberOfPeople100k=0;
+    var salarySum=0;
+    var averageSalary;
+    person.sort((a, b) => parseFloat(b[18]) - parseFloat(a[18]));
+    var slicedPersonForAvgCalc = person.slice(0, 10);
+    for (let j = 0; j < slicedPersonForAvgCalc.length; j++) {
+      salarySum+= parseFloat(slicedPersonForAvgCalc[j][18]);
+      htmlAvgCalc += 
+        '<tr><td>' + slicedPersonForAvgCalc[j][8]+ '</td>' + 
+        '<td>' + slicedPersonForAvgCalc[j][18] + '</td></tr>'
+    }
+    averageSalary =(salarySum/slicedPersonForAvgCalc.length)
+
+    for (let i = 0; i < len; i++) {
+      if(parseFloat(person[i][18]) > 100000){
+        numberOfPeople100k +=1;
+      }
+      html += 
+        '<tr><td>' + person[i][8]+ '</td>' + 
+        '<td>' + person[i][18] + '</td></tr>'
+    }
+      
+    container.innerHTML = `<p> Number of employees working in Boston earning over $100,000 is ${numberOfPeople100k}.</p>`
+    +'<h5> Below table gives the top 10 earning employees</h5>'
+
+    +'<table><tr><th>Name</th><th>Total Earnings</th></tr>' + htmlAvgCalc + '</table>'
+
+    +`<p> Average salary of top 10 earning employees in Boston is ${Math.round(averageSalary)}.</p>`
+
+    +'<h5> Below table gives all employees with Total earnings in decending order</h5>'
+
+    +'<table><tr><th>Name</th><th>Total Earnings</th></tr>' + html + '</table>';
+  }
+  renderPosts(posts, document.getElementById('container'));
+</script>
